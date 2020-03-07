@@ -22,10 +22,10 @@ server.get('/_ah/start', (req, res) => res.send('ok'));
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, new ExpressAdapter(server));
   const options = new DocumentBuilder()
-  .setTitle('Cats example')
-  .setDescription('The cats API description')
+  .setTitle('DigiCard API')
+  .setDescription('backend of digicard app')
   .setVersion('1.0')
-  .addTag('cats')
+  .addTag('digicard')
   .build();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('api', app, document);
