@@ -4,6 +4,7 @@ import { UserService } from '../shared/user.service';
 import { Payload } from '../types/payload';
 import { LoginDTO, RegisterDTO } from './auth.dto';
 import { AuthService } from './auth.service';
+import { ApiResponse } from '@nestjs/swagger';
 
 @Controller('auth')
 export class AuthController {
@@ -12,6 +13,7 @@ export class AuthController {
     private authService: AuthService,
   ) {}
 
+  @ApiResponse({ status: 202, description: 'The user has been successfully created.'})
   @Post('login')
   async login(@Body() userDTO: LoginDTO) {
     const user = await this.userService.findByLogin(userDTO);
