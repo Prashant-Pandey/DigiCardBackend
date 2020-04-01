@@ -2,7 +2,7 @@ import { Body, Controller, Post, Get } from '@nestjs/common';
 
 import { UserService } from '../shared/user.service';
 import { Payload } from '../types/payload';
-import { LoginDTO, RegisterDTO } from './auth.dto';
+import { LoginDTO, RegisterDTO, VerifyForgotPassword } from './auth.dto';
 import { AuthService } from './auth.service';
 import { ApiResponse } from '@nestjs/swagger';
 
@@ -34,13 +34,13 @@ export class AuthController {
     return { user, token };
   }
 
-  @Post("forgotPassword")
+  @Get("forgotPassword")
   async forgotPassword(@Body() email: string) {
-    const user = await this.userService.create(userDTO);
-    const payload: Payload = {
-      email: user.email
-    };
-    const token = await this.authService.signPayload(payload);
-    return { user, token };
+    return await this.userService.forgotPassword(email);
+  }
+
+  @Post("verifyForgotPassword")
+  async verifyForgotPassword(@Body() verifyForgotPass: VerifyForgotPassword){
+    return await this.userService.verifyForgotPassword(verifyForgotPass);
   }
 }

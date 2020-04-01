@@ -28,3 +28,11 @@ export class RegisterDTO {
   @ApiProperty()
   address: Address;
 }
+
+export class VerifyForgotPassword {
+  @ApiProperty()
+  email: string;
+
+  @ApiProperty()
+  token: string;
+}

@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 var bcrypt = require('bcryptjs');
 import { Model } from 'mongoose';
 
-import { LoginDTO, RegisterDTO } from '../auth/auth.dto';
+import { LoginDTO, RegisterDTO, VerifyForgotPassword } from '../auth/auth.dto';
 import { Payload } from '../types/payload';
 import { User } from '../types/user';
 
@@ -29,6 +29,17 @@ export class UserService {
       throw new HttpException('User does not exists', HttpStatus.BAD_REQUEST);
     }
     // send mail to the user
+    return 'success'
+  }
+
+  async verifyForgotPassword(verifyForgotPass: VerifyForgotPassword) {
+    const { email, token } = verifyForgotPass;
+    const user = await this.userModel.findOne({ email });
+    if (!user) {
+      throw new HttpException('User does not exists', HttpStatus.BAD_REQUEST);
+    }
+    // send mail to the user
+    
     return 'success'
   }
 
