@@ -13,13 +13,12 @@ export class AuthController {
     private authService: AuthService,
   ) {}
 
-  @ApiResponse({ status: 202, description: 'The user has been successfully created.'})
+  @ApiResponse({ status: 200, description: 'The user has been successfully created.'})
   @Post('login')
   async login(@Body() userDTO: LoginDTO) {
     const user = await this.userService.findByLogin(userDTO);
     const payload: Payload = {
-      username: user.username,
-      seller: user.seller,
+      email: user.email,
     };
     const token = await this.authService.signPayload(payload);
     return { user, token };
@@ -29,8 +28,17 @@ export class AuthController {
   async register(@Body() userDTO: RegisterDTO) {
     const user = await this.userService.create(userDTO);
     const payload: Payload = {
-      username: user.username,
-      seller: user.seller,
+      email: user.email
+    };
+    const token = await this.authService.signPayload(payload);
+    return { user, token };
+  }
+
+  @Post("forgotPassword")
+  async forgotPassword(@Body() email: string) {
+    const user = await this.userService.create(userDTO);
+    const payload: Payload = {
+      email: user.email
     };
     const token = await this.authService.signPayload(payload);
     return { user, token };

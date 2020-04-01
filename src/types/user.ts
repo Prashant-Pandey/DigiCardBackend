@@ -23,13 +23,19 @@ export class Address {
 
 export class User extends Document {
   @ApiProperty()
-  username: string;
+  email: string;
 
   @ApiProperty()
   readonly password: string;
 
   @ApiProperty()
-  seller: boolean;
+  first_name: string;
+
+  @ApiProperty()
+  last_name: string;
+
+  @ApiProperty()
+  phone_no:string;
 
   @ApiProperty()
   address: Address;

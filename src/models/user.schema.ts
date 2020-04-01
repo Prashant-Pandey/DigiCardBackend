@@ -2,15 +2,14 @@ var bcrypt = require('bcryptjs');
 import * as mongoose from 'mongoose';
 
 export const UserSchema = new mongoose.Schema({
-  username: String,
+  email: String,
   password: {
     type: String,
     select: false,
   },
-  seller: {
-    type: Boolean,
-    default: false,
-  },
+  first_name: String,
+  last_name: String,
+  phone_no: String,
   address: {
     addr1: String,
     addr2: String,

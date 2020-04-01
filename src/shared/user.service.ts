@@ -12,8 +12,8 @@ export class UserService {
   constructor(@InjectModel('User') private userModel: Model<User>) {}
 
   async create(userDTO: RegisterDTO) {
-    const { username } = userDTO;
-    const user = await this.userModel.findOne({ username });
+    const { email } = userDTO;
+    const user = await this.userModel.findOne({ email });
     if (user) {
       throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);
     }
@@ -23,15 +23,24 @@ export class UserService {
     return this.sanitizeUser(createdUser);
   }
 
+  async forgotPassword(email: string){
+    const user = await this.userModel.findOne({ email });
+    if (!user) {
+      throw new HttpException('User does not exists', HttpStatus.BAD_REQUEST);
+    }
+    // send mail to the user
+    return 'success'
+  }
+
   async find() {
     return await this.userModel.find();
   }
 
   async findByLogin(userDTO: LoginDTO) {
-    const { username, password } = userDTO;
+    const { email, password } = userDTO;
     const user = await this.userModel
-      .findOne({ username })
-      .select('username password seller created address');
+      .findOne({ email })
+      .select('email password created address');
     if (!user) {
       throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
     }
@@ -44,8 +53,8 @@ export class UserService {
   }
 
   async findByPayload(payload: Payload) {
-    const { username } = payload;
-    return await this.userModel.findOne({ username });
+    const { email } = payload;
+    return await this.userModel.findOne({ email });
   }
 
   sanitizeUser(user: User) {

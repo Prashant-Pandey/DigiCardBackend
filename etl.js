@@ -4,8 +4,7 @@ const axios = require('axios');
   try {
     const { data } = await axios.post('http://localhost:3000/api/auth/login', {
       username: 'kelvin',
-      password: 'password',
-      seller: true,
+      password: 'password'
     });
     console.log(data);
 
