@@ -29,7 +29,7 @@ export class UserService {
       throw new HttpException('User does not exists', HttpStatus.BAD_REQUEST);
     }
     // send mail to the user
-    return 'success'
+    return {'token':'skdhbsjhdbshdbshdb', '_id':'sndhsabvghdvasgvdas'}
   }
 
   async verifyForgotPassword(verifyForgotPass: VerifyForgotPassword) {
@@ -40,7 +40,7 @@ export class UserService {
     }
     // send mail to the user
     
-    return 'success'
+    return {'msg':'success'}
   }
 
   async find() {
