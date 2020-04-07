@@ -5,6 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { SharedModule } from './shared/shared.module';
+import { ProfileController } from './profile/profile.controller';
 
 @Module({
   imports: [
@@ -12,7 +13,7 @@ import { SharedModule } from './shared/shared.module';
     SharedModule,
     AuthModule,
   ],
-  controllers: [AppController],
+  controllers: [AppController, ProfileController],
   providers: [AppService],
 })
 export class AppModule {}

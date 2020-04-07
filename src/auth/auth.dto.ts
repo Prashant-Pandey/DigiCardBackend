@@ -35,4 +35,7 @@ export class VerifyForgotPassword {
 
   @ApiProperty()
   token: string;
+
+  @ApiProperty()
+  password: string;
 }

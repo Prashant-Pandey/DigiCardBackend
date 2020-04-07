@@ -13,6 +13,7 @@ export class UserService {
 
   async create(userDTO: RegisterDTO) {
     const { email } = userDTO;
+    console.log(email)
     const user = await this.userModel.findOne({ email });
     if (user) {
       throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);
@@ -28,12 +29,14 @@ export class UserService {
     if (!user) {
       throw new HttpException('User does not exists', HttpStatus.BAD_REQUEST);
     }
+
+    // generate token and email it 
     // send mail to the user
-    return {'token':'skdhbsjhdbshdbshdb', '_id':'sndhsabvghdvasgvdas'}
+    return {'status':'success'}
   }
 
   async verifyForgotPassword(verifyForgotPass: VerifyForgotPassword) {
-    const { email, token } = verifyForgotPass;
+    const { email, token, password } = verifyForgotPass;
     const user = await this.userModel.findOne({ email });
     if (!user) {
       throw new HttpException('User does not exists', HttpStatus.BAD_REQUEST);
