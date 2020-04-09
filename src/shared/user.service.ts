@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 var bcrypt = require('bcryptjs');
 import { Model } from 'mongoose';
 
-import { LoginDTO, RegisterDTO, VerifyForgotPassword } from '../auth/auth.dto';
+import { LoginDTO, RegisterDTO } from '../auth/auth.dto';
 import { Payload } from '../types/payload';
 import { User } from '../types/user';
 
@@ -13,8 +13,8 @@ export class UserService {
 
   async create(userDTO: RegisterDTO) {
     const { email } = userDTO;
-    console.log(email)
     const user = await this.userModel.findOne({ email });
+    // console.log(user, " from inside the user service, ", this.userModel.find());
     if (user) {
       throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);
     }
@@ -24,30 +24,16 @@ export class UserService {
     return this.sanitizeUser(createdUser);
   }
 
-  async forgotPassword(email: string){
-    const user = await this.userModel.findOne({ email });
-    if (!user) {
-      throw new HttpException('User does not exists', HttpStatus.BAD_REQUEST);
-    }
-
-    // generate token and email it 
-    // send mail to the user
-    return {'status':'success'}
-  }
-
-  async verifyForgotPassword(verifyForgotPass: VerifyForgotPassword) {
-    const { email, token, password } = verifyForgotPass;
-    const user = await this.userModel.findOne({ email });
-    if (!user) {
-      throw new HttpException('User does not exists', HttpStatus.BAD_REQUEST);
-    }
-    // send mail to the user
-    
-    return {'msg':'success'}
-  }
-
   async find() {
     return await this.userModel.find();
+  }
+
+  async verifyEmail(email:String){
+    let usr = this.userModel.findOne({email});
+    if (!usr) {
+      throw new HttpException('User not found', HttpStatus.BAD_REQUEST);
+    }
+    return {'_id':(await usr)._id,'email':(await usr).email};
   }
 
   async findByLogin(userDTO: LoginDTO) {

@@ -18,6 +18,10 @@ export const UserSchema = new mongoose.Schema({
     country: String,
     zip: Number,
   },
+  position:String,
+  company:String,
+  socials:Object,
+  introduction:String,
   created: { type: Date, default: Date.now },
 });
 

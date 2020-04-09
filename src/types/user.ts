@@ -1,5 +1,6 @@
 import { Document } from 'mongoose';
 import { ApiProperty } from "@nestjs/swagger";
+import { Optional } from '@nestjs/common';
 
 export class Address {
   @ApiProperty()
@@ -39,6 +40,18 @@ export class User extends Document {
 
   @ApiProperty()
   address: Address;
+
+  @ApiProperty()
+  position:String;
+  
+  @ApiProperty()
+  company:String;
+  
+  @ApiProperty()
+  socials:Object;
+  
+  @ApiProperty()
+  introduction:String
 
   @ApiProperty()
   created: Date;

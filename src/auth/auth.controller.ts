@@ -1,10 +1,12 @@
-import { Body, Controller, Post, Get } from '@nestjs/common';
+import { Body, Controller, Post, Get, UseGuards } from '@nestjs/common';
 
 import { UserService } from '../shared/user.service';
 import { Payload } from '../types/payload';
-import { LoginDTO, RegisterDTO, VerifyForgotPassword } from './auth.dto';
+import { LoginDTO, RegisterDTO, ChangePasswordDTO } from './auth.dto';
 import { AuthService } from './auth.service';
 import { ApiResponse } from '@nestjs/swagger';
+import { AuthGuard } from '@nestjs/passport';
+import { ForgotPasswordDTO, VerifyForgotPasswordDTO } from './token.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -27,6 +29,7 @@ export class AuthController {
   @Post('register')
   async register(@Body() userDTO: RegisterDTO) {
     const user = await this.userService.create(userDTO);
+    console.log("data at post", user);
     const payload: Payload = {
       email: user.email
     };
@@ -34,13 +37,19 @@ export class AuthController {
     return { user, token };
   }
 
-  @Get("forgotPassword")
-  async forgotPassword(@Body() email: string) {
-    return await this.userService.forgotPassword(email);
+  @Get("forgot")
+  async forgotPassword(@Body() forgotPass: ForgotPasswordDTO) {
+    return await this.authService.forgotPassword(forgotPass);
   }
 
   @Post("verifyForgotPassword")
-  async verifyForgotPassword(@Body() verifyForgotPass: VerifyForgotPassword){
-    return await this.userService.verifyForgotPassword(verifyForgotPass);
+  async verifyForgotPassword(@Body() verifyForgotPass: VerifyForgotPasswordDTO){
+    return await this.authService.verifyForgotPassword(verifyForgotPass);
+  }
+
+  @Post('updatePassword')
+  @UseGuards(AuthGuard())
+  async updatePassword(@Body() changePasswordDTO:ChangePasswordDTO){
+    return await this.authService.updatePassword(changePasswordDTO)
   }
 }

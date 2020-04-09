@@ -4,6 +4,7 @@
         "node_modules/": true,
         ".gitignore": true,
         ".prettierrc": true,
-        "package-lock.json":true
+        "package-lock.json":true,
+        "*.*.spec.ts":true
     }
 }
