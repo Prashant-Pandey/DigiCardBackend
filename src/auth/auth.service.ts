@@ -41,9 +41,6 @@ export class AuthService {
     const token = parseInt((Math.random()*1000000).toString());
     // save token to db
     this.vforgotpassword.create({email, token});
-    // if (!temp) {
-    //   throw new HttpException('Database error', HttpStatus.INTERNAL_SERVER_ERROR);
-    // }
     // send mail to the user and return sucess message
     await this.sendEmail(email, token)
     return {'msg':'success'};
@@ -67,24 +64,34 @@ export class AuthService {
 
   async verifyForgotPassword(verifyForgotPass: VerifyForgotPasswordDTO) {
     const { email, token, password } = verifyForgotPass;
-    const user = await this.userService.verifyEmail(email);
-    if (!user) {
-      throw new HttpException('User does not exists', HttpStatus.BAD_REQUEST);
-    }
+    // const user = await this.userService.verifyEmail(email);
+    // if (!user) {
+    //   throw new HttpException('User does not exists', HttpStatus.BAD_REQUEST);
+    // }
     // verify the token to corresponding user
-    const tokenData = await this.vforgotpassword.findOne({email, token});
+    const tokenData = await this.vforgotpassword.findOne({email});
     if (!tokenData) {
-      throw new HttpException('Please make forgot password request first please', HttpStatus.BAD_REQUEST);
+      throw new HttpException('Please make sure to create forgot password request first', HttpStatus.BAD_REQUEST);
+    }
+
+    if (tokenData.get('token') !== token) {
+      throw new HttpException('Please make sure email and token are inputted correctly', HttpStatus.BAD_REQUEST);
     }
     // delete the token
-    this.vforgotpassword.remove({email, token});
-    // update password
-    // return response
-    return 'need to update password'
+    let deleteData = await this.vforgotpassword.remove({email});
+    if (!deleteData) {
+      throw new HttpException('Technical issue! contact support@digicard.com', HttpStatus.EXPECTATION_FAILED);
+    }
+    // update password and return response
+    return this.updatePassword({password, email});
   }
 
   async updatePassword(changePasswordDTO: ChangePasswordDTO){
-    const {password} = changePasswordDTO;
-    const usr = this.userService.findByLogin
+    // const {password,email} = changePasswordDTO;
+    // if (password.length==0||email.length==0||!email.match('^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$')) {
+    //   throw new HttpException('Please input Valid Password', HttpStatus.BAD_REQUEST);
+    // }
+    // update password
+    return this.userService.updatePassword(changePasswordDTO)
   }
 }

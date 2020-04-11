@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 var bcrypt = require('bcryptjs');
 import { Model } from 'mongoose';
 
-import { LoginDTO, RegisterDTO } from '../auth/auth.dto';
+import { LoginDTO, RegisterDTO, ChangePasswordDTO } from '../auth/auth.dto';
 import { Payload } from '../types/payload';
 import { User } from '../types/user';
 
@@ -44,7 +44,7 @@ export class UserService {
     if (!user) {
       throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
     }
-
+    // console.log(password);
     if (await bcrypt.compare(password, user.password)) {
       return this.sanitizeUser(user);
     } else {
@@ -55,6 +55,13 @@ export class UserService {
   async findByPayload(payload: Payload) {
     const { email } = payload;
     return await this.userModel.findOne({ email });
+  }
+
+  async updatePassword(changePassDTO: ChangePasswordDTO){
+    const {email, password} = changePassDTO;
+    const hashPassword = await bcrypt.hash(password, 10);;
+    // console.log(hashPassword)
+    return this.userModel.findOneAndUpdate({email},{'password':hashPassword}) 
   }
 
   sanitizeUser(user: User) {

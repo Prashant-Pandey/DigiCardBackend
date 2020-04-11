@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Get, UseGuards } from '@nestjs/common';
+import { Body, Controller, Request, Post, Get, UseGuards } from '@nestjs/common';
 
 import { UserService } from '../shared/user.service';
 import { Payload } from '../types/payload';
@@ -7,6 +7,7 @@ import { AuthService } from './auth.service';
 import { ApiResponse } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { ForgotPasswordDTO, VerifyForgotPasswordDTO } from './token.dto';
+import { User } from '../utilities/user.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -48,8 +49,8 @@ export class AuthController {
   }
 
   @Post('updatePassword')
-  @UseGuards(AuthGuard())
-  async updatePassword(@Body() changePasswordDTO:ChangePasswordDTO){
-    return await this.authService.updatePassword(changePasswordDTO)
+  @UseGuards(AuthGuard('jwt'))
+  async updatePassword(@Body('password') password, @User() user){
+    return await this.authService.updatePassword({'password':password, 'email': user.email})
   }
 }
