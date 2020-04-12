@@ -60,31 +60,41 @@ export class UserService {
 
   async updatePassword(changePassDTO: ChangePasswordDTO){
     const {email, password} = changePassDTO;
-    const hashPassword = await bcrypt.hash(password, 10);;
-    // console.log(hashPassword)
-    return this.userModel.findOneAndUpdate({email},{'password':hashPassword})
+    const hashPassword = await bcrypt.hash(password, 10);
+    return this.userModel.findOneAndUpdate({email},{'password':hashPassword});
   }
 
   async updateCard(userDTO: UserProfile){
-     const {card, email, phone_no, address, position, company, socials, sharedCardsArray} = userDTO;
+     const {email, phone_no, address, position, company, socials} = userDTO;
      return this.userModel.findOneAndUpdate({email}, {$set:
-      {'card': true,
-      'email': email,
-      'phone_no':phone_no,
-      'address':address,
-      'position':position,
-      'company':company,
-      'socials':socials,
-      'sharedCardsArray':sharedCardsArray}});
+      {
+        phone_no,
+        address,
+        position,
+        company,
+        socials
+      }
+    });
   }
 
-  async getProfile(userDTO: UserProfile){
-    const {card, email, phone_no, address, position, company, socials, sharedCardsArray} = userDTO;
-    if(card){
-      return await this.userModel.findOne({ email });//user._id
-    } else {
-      return this.updateCard(userDTO);
+  async getAllSharedProfiles(user: User){
+    const {email} = user;
+    const cardData = await this.userModel.findOne({email});
+    if (!cardData) {
+      throw new HttpException('Invalid user, please contact admin for help', HttpStatus.UNAUTHORIZED);
     }
+    return cardData.sharedCardsArray.map((_id)=>{
+      return this.userModel.findOne({_id});
+    });
+  }
+
+  async getProfile(userData: User){
+    const {email} = userData;
+    const cardData = await this.userModel.findOne({email});
+    if (!cardData) {
+      throw new HttpException('Invalid user, please contact admin for help', HttpStatus.UNAUTHORIZED);
+    }
+    return cardData;
   }
 
   sanitizeUser(user: User) {

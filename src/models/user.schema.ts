@@ -23,7 +23,7 @@ export const UserSchema = new mongoose.Schema({
   company:String,
   socials:Object,
   introduction:String,
-  sharedCardsArray: [],
+  sharedCardsArray: Array,
   created: { type: Date, default: Date.now },
 });
 

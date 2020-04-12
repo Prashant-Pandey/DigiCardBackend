@@ -4,7 +4,7 @@ import { ApiProperty } from '@nestjs/swagger';
 export class UserProfile {
 
   @ApiProperty()
-  card: Boolean;
+  card: boolean;
 
   @ApiProperty()
   email: string;
@@ -25,17 +25,23 @@ export class UserProfile {
   address: Address;
 
   @ApiProperty()
-  position:String;
+  position:string;
 
   @ApiProperty()
-  company:String;
+  company:string;
 
   @ApiProperty()
-  socials:Object;
+  socials:object;
 
   @ApiProperty()
-  introduction:String;
+  introduction:string;
 
   @ApiProperty()
-  sharedCardsArray:[];
+  sharedCardsArray:Array<string>;
+}
+
+export class commonVisible{
+  txt:string;
+  visiblility:string;
+
 }
