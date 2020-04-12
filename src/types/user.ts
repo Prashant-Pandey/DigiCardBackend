@@ -23,6 +23,10 @@ export class Address {
 }
 
 export class User extends Document {
+
+  @ApiProperty()
+  card: Boolean;
+
   @ApiProperty()
   email: string;
 
@@ -43,15 +47,18 @@ export class User extends Document {
 
   @ApiProperty()
   position:String;
-  
+
   @ApiProperty()
   company:String;
-  
+
   @ApiProperty()
   socials:Object;
-  
+
   @ApiProperty()
   introduction:String
+
+  @ApiProperty()
+  sharedCardsArray:[];
 
   @ApiProperty()
   created: Date;

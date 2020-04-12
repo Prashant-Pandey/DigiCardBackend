@@ -4,6 +4,7 @@ var bcrypt = require('bcryptjs');
 import { Model } from 'mongoose';
 
 import { LoginDTO, RegisterDTO, ChangePasswordDTO } from '../auth/auth.dto';
+import { UserProfile } from '../user/user.dto';
 import { Payload } from '../types/payload';
 import { User } from '../types/user';
 
@@ -61,7 +62,29 @@ export class UserService {
     const {email, password} = changePassDTO;
     const hashPassword = await bcrypt.hash(password, 10);;
     // console.log(hashPassword)
-    return this.userModel.findOneAndUpdate({email},{'password':hashPassword}) 
+    return this.userModel.findOneAndUpdate({email},{'password':hashPassword})
+  }
+
+  async updateCard(userDTO: UserProfile){
+     const {card, email, phone_no, address, position, company, socials, sharedCardsArray} = userDTO;
+     return this.userModel.findOneAndUpdate({email}, {$set:
+      {'card': true,
+      'email': email,
+      'phone_no':phone_no,
+      'address':address,
+      'position':position,
+      'company':company,
+      'socials':socials,
+      'sharedCardsArray':sharedCardsArray}});
+  }
+
+  async getProfile(userDTO: UserProfile){
+    const {card, email, phone_no, address, position, company, socials, sharedCardsArray} = userDTO;
+    if(card){
+      return await this.userModel.findOne({ email });//user._id
+    } else {
+      return this.updateCard(userDTO);
+    }
   }
 
   sanitizeUser(user: User) {

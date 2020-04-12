@@ -2,6 +2,7 @@ var bcrypt = require('bcryptjs');
 import * as mongoose from 'mongoose';
 
 export const UserSchema = new mongoose.Schema({
+  card: Boolean,
   email: String,
   password: {
     type: String,
@@ -22,6 +23,7 @@ export const UserSchema = new mongoose.Schema({
   company:String,
   socials:Object,
   introduction:String,
+  sharedCardsArray: [],
   created: { type: Date, default: Date.now },
 });
 
