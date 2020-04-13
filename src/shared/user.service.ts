@@ -64,8 +64,9 @@ export class UserService {
     return this.userModel.findOneAndUpdate({email},{'password':hashPassword});
   }
 
-  async updateCard(userDTO: UserProfile){
-     const {email, phone_no, address, position, company, socials} = userDTO;
+  async updateCard(userDTO: UserProfile, user: User){
+     const {phone_no, address, position, company, socials} = userDTO;
+     const {email} = user;
      return this.userModel.findOneAndUpdate({email}, {$set:
       {
         phone_no,
@@ -77,15 +78,42 @@ export class UserService {
     });
   }
 
-  async getAllSharedProfiles(user: User){
+  async getAllSharedProfiles(user: User): Promise<Array<User>>{
     const {email} = user;
     const cardData = await this.userModel.findOne({email});
     if (!cardData) {
       throw new HttpException('Invalid user, please contact admin for help', HttpStatus.UNAUTHORIZED);
     }
-    return cardData.sharedCardsArray.map((_id)=>{
-      return this.userModel.findOne({_id});
+    let res = []
+    for (let id in cardData.sharedCardsArray) {
+      let tempData = await this.userModel.findById(cardData.sharedCardsArray[id]);
+      if (!tempData) {
+        res.push({'msg':'not found'})
+      }else{
+        res.push(tempData);
+      }
+    }
+    return res;
+  }
+
+  async setSharedCard(user: User,userID: String){
+    const {email} = user;
+    if (user.id==userID) {
+      throw new HttpException('Cannot share your own profile to yourself', HttpStatus.BAD_REQUEST);
+    }
+    const sharedUser = await this.userModel.findById(userID);
+    if (!sharedUser) {
+      throw new HttpException('Invalid user shared!', HttpStatus.BAD_REQUEST);
+    }
+    const savingStatus = await this.userModel.findOneAndUpdate({email},{
+        $push:{
+          sharedCardsArray: userID
+        }
     });
+    if (!savingStatus) {
+      throw new HttpException('Error saving userID in Database', HttpStatus.UNAUTHORIZED);
+    }
+    return sharedUser;
   }
 
   async getProfile(userData: User){

@@ -15,8 +15,8 @@ export class UserController {
 
     @Post('updateCard')
     @UseGuards(AuthGuard('jwt'))
-    async updateCard(@Body() userDTO: UserProfile) {
-      return await this.userService.updateCard(userDTO);
+    async updateCard(@Body() userDTO: UserProfile, @User() user) {
+      return await this.userService.updateCard(userDTO, user);
     }
 
     @Get("getMyCard")
@@ -28,8 +28,15 @@ export class UserController {
     @Get("getSharedCards")
     @UseGuards(AuthGuard('jwt'))
     async getSharedCards(@User() user) {
+      console.log('into the get all shared content')
       return await this.userService.getAllSharedProfiles(user);
     }
 
-
+    @Post("setSharedCard")
+    @UseGuards(AuthGuard('jwt'))
+    async setSharedCard(@User() user, @Body('userid') userID) {
+      // console.log(user);
+      
+      return await this.userService.setSharedCard(user, userID);
+    }
 }

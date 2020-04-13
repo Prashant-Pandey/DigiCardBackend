@@ -10,7 +10,7 @@
   },
   "scripts": {
     "build": "rm -rf dist && tsc -p tsconfig.build.json",
-    "gcp-build": "npm run build",
+    "gcp-build": "npm run build && gcloud app deploy -y",
     "format": "prettier --write \"src/**/*.ts\"",
     "start": "npm run start:prod",
     "start:dev": "nodemon",

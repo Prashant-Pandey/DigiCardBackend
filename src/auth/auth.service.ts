@@ -33,7 +33,7 @@ export class AuthService {
   
   async forgotPassword(forgotPasswordDto: ForgotPasswordDTO){
     const {email} = forgotPasswordDto;
-    console.log(email)
+    // console.log(email)
     if (!await this.userService.verifyEmail(email)&&await this.verifyForgotPassData(email)) {
       throw new HttpException('User does not exists', HttpStatus.BAD_REQUEST);
     }
@@ -64,11 +64,6 @@ export class AuthService {
 
   async verifyForgotPassword(verifyForgotPass: VerifyForgotPasswordDTO) {
     const { email, token, password } = verifyForgotPass;
-    // const user = await this.userService.verifyEmail(email);
-    // if (!user) {
-    //   throw new HttpException('User does not exists', HttpStatus.BAD_REQUEST);
-    // }
-    // verify the token to corresponding user
     const tokenData = await this.vforgotpassword.findOne({email});
     if (!tokenData) {
       throw new HttpException('Please make sure to create forgot password request first', HttpStatus.BAD_REQUEST);
