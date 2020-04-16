@@ -45,3 +45,8 @@ export class commonVisible{
   visiblility:string;
 
 }
+
+export class userIdDTO{
+  @ApiProperty()
+  userID: string;
+}

@@ -25,6 +25,7 @@ export class RegisterDTO {
 export class ChangePasswordDTO{
   @ApiProperty()
   password: string;
+  
   @ApiProperty()
   email: string;
 }

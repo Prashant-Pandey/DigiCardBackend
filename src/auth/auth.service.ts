@@ -62,6 +62,8 @@ export class AuthService {
       });
   }
 
+  // validate email
+
   async verifyForgotPassword(verifyForgotPass: VerifyForgotPasswordDTO) {
     const { email, token, password } = verifyForgotPass;
     const tokenData = await this.vforgotpassword.findOne({email});

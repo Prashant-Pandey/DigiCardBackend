@@ -1,6 +1,6 @@
 import { Controller, Get, UseGuards, Put, Body, Post } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { UserProfile } from '../user/user.dto';
+import { UserProfile, userIdDTO } from '../user/user.dto';
 import { UserService } from '../shared/user.service';
 import { User } from '../utilities/user.decorator';
 
@@ -8,9 +8,8 @@ import { User } from '../utilities/user.decorator';
 export class UserController {
      constructor(private userService: UserService) {}
     @Get('')
-    // @UseGuards(AuthGuard())
-    async getUserProfileById(){
-    //   return await this.userService.findFromID(user.id);
+    async HelloWorld(){
+      return 'hello user'
     }
 
     @Post('updateCard')
@@ -34,9 +33,7 @@ export class UserController {
 
     @Post("setSharedCard")
     @UseGuards(AuthGuard('jwt'))
-    async setSharedCard(@User() user, @Body('userid') userID) {
-      // console.log(user);
-      
-      return await this.userService.setSharedCard(user, userID);
+    async setSharedCard(@User() user, @Body() userId: userIdDTO) {
+      return await this.userService.setSharedCard(user, userId);
     }
 }
