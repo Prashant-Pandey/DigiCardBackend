@@ -53,4 +53,11 @@ export class AuthController {
   async updatePassword(@Body('password') password, @User() user){
     return await this.authService.updatePassword({'password':password, 'email': user.email})
   }
+
+  @Post('logout')
+  @UseGuards(AuthGuard('jwt'))
+  async logout(@Request() req, @User() user){
+    req.logout();
+    return {'msg':'success'}
+  }
 }
