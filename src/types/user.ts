@@ -1,5 +1,6 @@
 import { Document } from 'mongoose';
 import { ApiProperty } from "@nestjs/swagger";
+import { Optional } from '@nestjs/common';
 
 export class Address {
   @ApiProperty()
@@ -22,6 +23,10 @@ export class Address {
 }
 
 export class User extends Document {
+
+  @ApiProperty()
+  card: boolean;
+
   @ApiProperty()
   email: string;
 
@@ -39,6 +44,21 @@ export class User extends Document {
 
   @ApiProperty()
   address: Address;
+
+  @ApiProperty()
+  position:string;
+
+  @ApiProperty()
+  company:string;
+
+  @ApiProperty()
+  socials:object;
+
+  @ApiProperty()
+  introduction:string
+
+  @ApiProperty()
+  sharedCardsArray:Array<string>;
 
   @ApiProperty()
   created: Date;

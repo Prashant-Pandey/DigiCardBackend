@@ -1,4 +1,3 @@
-import { Address } from '../types/user';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class LoginDTO {
@@ -21,21 +20,12 @@ export class RegisterDTO {
 
   @ApiProperty()
   last_name?: string;
-
-  @ApiProperty()
-  phone_no: string;
-
-  @ApiProperty()
-  address: Address;
 }
 
-export class VerifyForgotPassword {
-  @ApiProperty()
-  email: string;
-
-  @ApiProperty()
-  token: string;
-
+export class ChangePasswordDTO{
   @ApiProperty()
   password: string;
+  
+  @ApiProperty()
+  email: string;
 }
