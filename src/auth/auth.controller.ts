@@ -16,7 +16,7 @@ export class AuthController {
     private authService: AuthService,
   ) {}
 
-  @ApiResponse({ status: 200, description: 'The user has been successfully created.'})
+  
   @Post('login')
   async login(@Body() userDTO: LoginDTO) {
     const user = await this.userService.findByLogin(userDTO);
@@ -35,7 +35,7 @@ export class AuthController {
       email: user.email
     };
     const token = await this.authService.signPayload(payload);
-    return { user, token };
+    return { user, token };   
   }
 
   @Get("forgot")

@@ -39,31 +39,27 @@ export class AuthService {
     }
     // generate token 
     const token = parseInt((Math.random()*1000000).toString());
-    // save token to db
-    this.vforgotpassword.create({email, token});
     // send mail to the user and return sucess message
-    await this.sendEmail(email, token)
-    return {'msg':'success'};
+    let mailerResponse = await this.sendEmail(email, 'Verification Token', (token+" is the verification token for you DigiCard"));
+    if(!mailerResponse){
+      throw new HttpException("error from the mailer", HttpStatus.INTERNAL_SERVER_ERROR);
+    }else{
+      // save token to db
+      this.vforgotpassword.create({email, token});
+      return {'msg':'success'};
+    }
   }
 
-  async sendEmail(email:string, token:any){
-    this
-      .mailerService
-      .sendMail({
-        from: '22.ppandey@gmail.com',
+  async sendEmail(email:string, sub:string, message:string){
+    return this.mailerService .sendMail({
+        from: process.env.EMAIL_SENDER,
         to: email,
-        subject: 'Verification Token',
-        text: token+" is the verification token for you DigiCard"
-      }).then((msg)=>{
-        console.log(msg)
-        return msg;
-      }).catch((error)=>{
-        throw new HttpException(error+" from the mailer", HttpStatus.INTERNAL_SERVER_ERROR);
+        subject: sub,
+        text: message
       });
   }
 
   // validate email
-
   async verifyForgotPassword(verifyForgotPass: VerifyForgotPasswordDTO) {
     const { email, token, password } = verifyForgotPass;
     const tokenData = await this.vforgotpassword.findOne({email});

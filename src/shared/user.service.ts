@@ -40,7 +40,7 @@ export class UserService {
     const { email, password } = userDTO;
     const user = await this.userModel
       .findOne({ email })
-      .select('email password created address');
+      .select('email password first_name last_name created');
     if (!user) {
       throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
     }

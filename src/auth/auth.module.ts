@@ -13,7 +13,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
     SharedModule,
     MongooseModule.forFeature([{ name: 'VerifyForgotPassword', schema: ForgotPasswordSchema }]),
     MailerModule.forRoot({
-      transport: 'smtps://22.ppandey@gmail.com:PRASH22face!@smtp.gmail.com',
+      transport: process.env.EMAIL_URI,
       defaults: {
         from:'"nest-modules" <modules@nestjs.com>',
       }
